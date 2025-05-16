@@ -59,11 +59,14 @@
         <input type="text" id="guessInput" maxlength="1">
         <button onclick="makeGuess()">Submit</button>
         <p id="message"></p>
+        <p>Wrong guesses remaining: <span id="remainingGuesses">6</span></p>
     </div>
 
     <script>
         let secretWord = "";
         let displayedWord = "";
+        let wrongGuesses = 0;
+        const maxWrongGuesses = 6;
 
         function startGame() {
             secretWord = document.getElementById("wordInput").value.toLowerCase();
@@ -72,6 +75,9 @@
             
             document.getElementById("setupArea").style.display = "none";
             document.getElementById("gameArea").style.display = "block";
+            wrongGuesses = 0;
+            document.getElementById("message").textContent = "";
+            document.getElementById("remainingGuesses").textContent = maxWrongGuesses;
         }
 
         function makeGuess() {
@@ -90,7 +96,15 @@
                     document.getElementById("message").textContent = "🎉 Congratulations! You guessed the word!";
                 }
             } else {
-                document.getElementById("message").textContent = "❌ Wrong guess! Try again.";
+                wrongGuesses++;
+                document.getElementById("remainingGuesses").textContent = maxWrongGuesses - wrongGuesses;
+
+                if (wrongGuesses >= maxWrongGuesses) {
+                    document.getElementById("message").textContent = `☠️ Game Over! The word was: ${secretWord}`;
+                    document.getElementById("gameArea").style.display = "none"; 
+                } else {
+                    document.getElementById("message").textContent = `❌ Wrong guess! Attempts left: ${maxWrongGuesses - wrongGuesses}`;
+                }
             }
         }
     </script>
