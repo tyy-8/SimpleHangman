@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            margin: 50px auto;
+        }
+        input, button {
+            margin: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #hiddenWord {
+            font-size: 24px;
+            margin: 20px 0;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hangman Game</h1>
+    
+    <div class="container" id="setupArea">
+        <label for="wordInput">Enter secret word:</label>
+        <input type="password" id="wordInput">
+        <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <div class="container" id="gameArea" style="display: none;">
+        <p id="hiddenWord"></p>
+        <label for="guessInput">Guess a letter:</label>
+        <input type="text" id="guessInput" maxlength="1">
+        <button onclick="makeGuess()">Submit</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        let secretWord = "";
+        let displayedWord = "";
+
+        function startGame() {
+            secretWord = document.getElementById("wordInput").value.toLowerCase();
+            displayedWord = "_ ".repeat(secretWord.length);
+            document.getElementById("hiddenWord").textContent = displayedWord.trim();
+            
+            document.getElementById("setupArea").style.display = "none";
+            document.getElementById("gameArea").style.display = "block";
+        }
+
+        function makeGuess() {
+            let guess = document.getElementById("guessInput").value.toLowerCase();
+            document.getElementById("guessInput").value = "";
+
+            if (guess.length === 1 && secretWord.includes(guess)) {
+                let newDisplayedWord = "";
+                for (let i = 0; i < secretWord.length; i++) {
+                    newDisplayedWord += (secretWord[i] === guess) ? guess + " " : displayedWord[i * 2] + " ";
+                }
+                displayedWord = newDisplayedWord;
+                document.getElementById("hiddenWord").textContent = displayedWord.trim();
+
+                if (!displayedWord.includes("_")) {
+                    document.getElementById("message").textContent = "🎉 Congratulations! You guessed the word!";
+                }
+            } else {
+                document.getElementById("message").textContent = "❌ Wrong guess! Try again.";
+            }
+        }
+    </script>
+
+</body>
+</html>
